@@ -1,0 +1,40 @@
+---
+- assert:
+    that: filebeat_version and filebeat_version|length > 0
+  when: not filebeat_install_from_repo
+
+- include: "{{ ansible_os_family | lower }}.yml"
+
+- set_fact:
+    filebeat_global_config: "{{ filebeat_global_base_config | combine(filebeat_global_config, recursive=True) }}"
+    filebeat_logging_config: "{{ filebeat_logging_base_config | combine(filebeat_logging_config, recursive=True) }}"
+
+- name: create config directory
+  file:
+    path: "{{ filebeat_global_config['config_dir'] }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: filebeat_global_config['config_dir'] is defined and filebeat_global_config['config_dir'] != None
+
+- name: create log directory
+  file:
+    path: "{{ filebeat_logging_config['files']['path'] }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: filebeat_logging_config['files']['path'] | default(None) != None
+
+- name: write config
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+  notify: restart filebeat
+
+- name: manage filebeat service
+  service:
+    name: filebeat
+    state: "{{ filebeat_service_enabled | ternary('started', 'stopped') }}"
+    enabled: "{{ filebeat_service_enabled }}"

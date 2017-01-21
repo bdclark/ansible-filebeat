@@ -1,0 +1,10 @@
+---
+filebeat_global_base_config:
+  config_dir: /etc/filebeat/conf.d
+
+filebeat_logging_base_config:
+  to_syslog: false
+  to_files: true
+  files:
+    path: /var/log/filebeat
+    keepfiles: 7

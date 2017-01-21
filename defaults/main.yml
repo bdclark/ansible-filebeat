@@ -1,0 +1,28 @@
+---
+# optional pin to specific version
+filebeat_version: ~
+# attempt to install from repo
+filebeat_install_from_repo: yes
+# fallback to deb/rpm package download if repo fails
+filebeat_package_install_fallback: yes
+# enable/disable filebeat service
+filebeat_service_enabled: yes
+
+# config file definitions (see tests for examples)
+filebeat_general_config: {}
+filebeat_global_config: {}
+filebeat_logging_config: {}
+filebeat_output_config: {}
+## prospectors
+filebeat_prospectors: []
+filebeat_prospectors_group: []
+filebeat_prospectors_host: []
+
+# dep/rpm package settings
+filebeat_artifact_baseurl: https://artifacts.elastic.co/downloads/beats/filebeat
+filebeat_deb_filename: filebeat-{{ filebeat_version }}-{{ ansible_architecture | replace("x86_64", "amd64") }}.deb
+filebeat_rpm_filename: filebeat-{{ filebeat_version }}-{{ ansible_architecture }}.rpm
+filebeat_artficat_download_dir: /tmp
+# set the following to use checksums with deb/rpm downloads
+# filebeat_deb_checksum: ~
+# filebeat_rpm_checksum: ~

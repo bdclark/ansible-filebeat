@@ -1,0 +1,23 @@
+---
+- hosts: test-kitchen
+  become: yes
+  vars:
+    filebeat_general_config:
+      fields:
+        env: test
+      tags:
+        - foobar
+    filebeat_prospectors:
+      - paths:
+          - var/log/*.log
+        input_type: log
+    filebeat_prospectors_host:
+      - paths:
+          - var/log/filebeat/*.log
+        input_type: log
+    filebeat_output_config:
+      file:
+        path: /tmp/filebeat
+        filename: filebeat
+  roles:
+    - role: filebeat
