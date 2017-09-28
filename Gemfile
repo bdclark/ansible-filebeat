@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'test-kitchen'
+gem 'inspec'
 gem 'kitchen-ansible'
-gem 'kitchen-docker'
+gem 'kitchen-inspec'
+gem 'kitchen-vagrant'
+gem 'test-kitchen', '~> 1.4'

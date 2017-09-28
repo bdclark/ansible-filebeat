@@ -4,9 +4,8 @@ driver:
 
 provisioner:
   name: ansible_playbook
-  # roles_path: ../filebeat/
   require_chef_for_busser: false
-  require_ruby_for_busser: true
+  require_ruby_for_busser: false
   hosts: test-kitchen
   ansible_verbose: true
   ansible_verbosity: 1
@@ -15,12 +14,13 @@ provisioner:
   # idempotency_test: true
 
 verifier:
-  ruby_bindir: '/usr/bin'
+  name: inspec
 
 platforms:
 - name: ubuntu-14.04
 - name: ubuntu-16.04
 - name: centos-6.7
+- name: centos-7.2
 
 suites:
 - name: default
