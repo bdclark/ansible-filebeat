@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    filebeat_fields:
+      myglobalkey: myglobalvalue
+    filebeat_fields_group:
+      environment: test
+    filebeat_tags:
+      - foobar
+    filebeat_tags_group:
+      - webservers
+    filebeat_config:
+      output:
+        file:
+          path: /tmp/filebeat
+          filename: filebeat
+    filebeat_prospectors:
+      - paths:
+          - var/log/*.log
+        input_type: log
+    filebeat_prospectors_host:
+      - paths:
+          - var/log/filebeat/*.log
+        input_type: log
+  roles:
+    - role: filebeat

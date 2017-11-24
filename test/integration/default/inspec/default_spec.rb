@@ -6,10 +6,10 @@ end
 describe file('/etc/filebeat/filebeat.yml') do
   it { should be_file }
   it { should be_owned_by 'root' }
-  its('mode') { should cmp '0644' }
+  its('mode') { should cmp '0600' }
 end
 
-describe file('/etc/filebeat/conf.d') do
+describe file('/var/lib/filebeat') do
   it { should be_directory }
 end
 
