@@ -1,28 +1,37 @@
 ---
-# optional pin to specific version
-filebeat_version: ~
-# attempt to install from repo
-filebeat_install_from_repo: yes
-# fallback to deb/rpm package download if repo fails
-filebeat_package_install_fallback: yes
-# enable/disable filebeat service
-filebeat_service_enabled: yes
-
-# config file definitions (see tests for examples)
-filebeat_general_config: {}
-filebeat_global_config: {}
-filebeat_logging_config: {}
-filebeat_output_config: {}
-## prospectors
-filebeat_prospectors: []
-filebeat_prospectors_group: []
-filebeat_prospectors_host: []
-
+# filebeat version to install
+filebeat_version: 6.0.0
 # dep/rpm package settings
+filebeat_artficat_download_dir: /tmp
 filebeat_artifact_baseurl: https://artifacts.elastic.co/downloads/beats/filebeat
 filebeat_deb_filename: filebeat-{{ filebeat_version }}-{{ ansible_architecture | replace("x86_64", "amd64") }}.deb
 filebeat_rpm_filename: filebeat-{{ filebeat_version }}-{{ ansible_architecture }}.rpm
-filebeat_artficat_download_dir: /tmp
 # set the following to use checksums with deb/rpm downloads
 # filebeat_deb_checksum: ~
 # filebeat_rpm_checksum: ~
+
+# enable/disable filebeat service
+filebeat_service_enabled: yes
+
+# filebeat config (excluding prospectors and modules)
+filebeat_config: {}
+## name - will use filebeat default if not set (hostname)
+filebeat_name: ~
+## tags (global, group, and host level if desired)
+filebeat_tags: []
+filebeat_tags_group: []
+filebeat_tags_host: []
+## fields (global, group, and host level if desired)
+filebeat_fields: {}
+filebeat_fields_group: {}
+filebeat_fields_host: {}
+## prospectors (global, group, and host level if desired)
+filebeat_prospectors: []
+filebeat_prospectors_group: []
+filebeat_prospectors_host: []
+## modules (global, group, and host level if desired)
+filebeat_modules: []
+filebeat_modules_group: []
+filebeat_modules_host: []
+
+filebeat_config_template: filebeat.yml.j2

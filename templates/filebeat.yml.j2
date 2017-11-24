@@ -1,5 +1,2 @@
 # Managed by Ansible. Local changes will be overwritten.
-{{ filebeat_general_config | to_yaml }}
-{{ {'filebeat': {'prospectors': filebeat_prospectors | union(filebeat_prospectors_group) | union(filebeat_prospectors_host)} | combine(filebeat_global_config, recursive=True)} | to_yaml }}
-{{ {'output': filebeat_output_config} | to_yaml }}
-{{ {'logging': filebeat_logging_config} | to_yaml }}
+{{ filebeat_final_config | to_yaml }}

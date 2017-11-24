@@ -1,10 +1,25 @@
 ---
-filebeat_global_base_config:
-  config_dir: /etc/filebeat/conf.d
+filebeat_base_config:
+  fields: "{{ filebeat_fields | combine(filebeat_fields_group, recursive=True) | combine(filebeat_fields_host, recursive=True) }}"
+  tags: "{{ filebeat_tags | union(filebeat_tags_group) | union(filebeat_tags_host) }}"
+  filebeat:
+    prospectors: "{{ filebeat_prospectors | union(filebeat_prospectors_group) | union(filebeat_prospectors_host) }}"
+    modules: "{{ filebeat_modules | union(filebeat_modules_group) | union(filebeat_modules_host) }}"
 
-filebeat_logging_base_config:
-  to_syslog: false
-  to_files: true
-  files:
-    path: /var/log/filebeat
-    keepfiles: 7
+filebeat_base_config_6x:
+  filebeat:
+    config:
+      modules:
+        path:  /etc/filebeat/modules.d/*.yml
+        reload:
+          enabled: false
+  setup:
+    template:
+      settings:
+        index:
+          number_of_shards: 3
+
+filebeat_final_config: "{{ filebeat_base_config |
+  combine(filebeat_base_config_6x if (filebeat_version | version_compare('5', '>')) else {}, recursive=True) |
+  combine({} if filebeat_name == None else {'name': filebeat_name}) |
+  combine(filebeat_config, recursive=True) }}"

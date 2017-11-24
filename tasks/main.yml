@@ -1,37 +1,46 @@
 ---
-- assert:
-    that: filebeat_version and filebeat_version|length > 0
-  when: not filebeat_install_from_repo
+- block:
+  - name: download filebeat deb
+    get_url:
+      url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_deb_filename }}"
+      checksum: "{{ filebeat_deb_checksum|default(omit) }}"
+      dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename}}"
 
-- include: "{{ ansible_os_family | lower }}.yml"
+  - name: install filebeat deb
+    apt:
+      deb: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename }}"
+      state: present
+      force: yes
+    notify: restart filebeat
+  when: ansible_os_family == 'Debian'
 
-- set_fact:
-    filebeat_global_config: "{{ filebeat_global_base_config | combine(filebeat_global_config, recursive=True) }}"
-    filebeat_logging_config: "{{ filebeat_logging_base_config | combine(filebeat_logging_config, recursive=True) }}"
+- block:
+  - name: download filebeat rpm
+    get_url:
+      url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_rpm_filename }}"
+      checksum: "{{ filebeat_rpm_checksum|default(omit) }}"
+      dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename}}"
 
-- name: create config directory
+  - name: install filebeat rpm
+    yum:
+      name: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename }}"
+      state: present
+  when: not ansible_os_family == 'Debian'
+
+- name: ensure directories exist
   file:
-    path: "{{ filebeat_global_config['config_dir'] }}"
     state: directory
-    owner: root
-    group: root
-    mode: 0755
-  when: filebeat_global_config['config_dir'] is defined and filebeat_global_config['config_dir'] != None
+    path: "{{ item }}"
+  with_items:
+    - /etc/filebeat
+    - /var/lib/filebeat
+    - /var/log/filebeat
 
-- name: create log directory
-  file:
-    path: "{{ filebeat_logging_config['files']['path'] }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-  when: filebeat_logging_config['files']['path'] | default(None) != None
-
-- name: write config
+- name: write config file
   template:
-    src: filebeat.yml.j2
+    src: "{{ filebeat_config_template }}"
     dest: /etc/filebeat/filebeat.yml
-    mode: 0644
+    mode: 0600
   notify: restart filebeat
 
 - name: manage filebeat service
