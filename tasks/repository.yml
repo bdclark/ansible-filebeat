@@ -1,0 +1,43 @@
+---
+- block:
+    - name: install apt-transport-https (apt)
+      apt:
+        name: apt-transport-https
+        state: present
+
+    - name: add elastic gpg key (apt)
+      apt_key:
+        url: "{{ filebeat_gpg_key }}"
+        state: present
+
+    - name: add elastic repository (apt)
+      apt_repository:
+        repo: "{{ filebeat_apt_url }}"
+        filename: "elastic-{{ filebeat_version.split('.')[0] }}.x"
+        state: present
+
+    - name: install filebeat (apt)
+      apt:
+        name: "filebeat={{ filebeat_version }}"
+        state: present
+  when: ansible_os_family == 'Debian'
+
+- block:
+    - name: add elastic gpg key (yum)
+      rpm_key:
+        key: "{{ filebeat_gpg_key }}"
+        state: present
+
+    - name: add elastic repository (yum)
+      yum_repository:
+        name: "elastic-{{ filebeat_version.split('.')[0] }}.x"
+        description: "Elastic repository for {{ filebeat_version.split('.')[0] }}.x packages"
+        baseurl: "{{ filebeat_yum_url }}"
+        gpgkey: "{{ filebeat_gpg_key }}"
+        gpgcheck: yes
+
+    - name: install filebeat (yum)
+      yum:
+        name: "filebeat-{{ filebeat_version }}-1"
+        state: present
+  when: ansible_os_family != 'Debian'

@@ -1,6 +1,10 @@
 ---
 # filebeat version to install
-filebeat_version: 6.0.0
+filebeat_version: 6.2.2
+
+# installation method, can be package or repository
+filebeat_install_method: package
+
 # dep/rpm package settings
 filebeat_artficat_download_dir: /tmp
 filebeat_artifact_baseurl: https://artifacts.elastic.co/downloads/beats/filebeat
@@ -9,6 +13,14 @@ filebeat_rpm_filename: filebeat-{{ filebeat_version }}-{{ ansible_architecture }
 # set the following to use checksums with deb/rpm downloads
 # filebeat_deb_checksum: ~
 # filebeat_rpm_checksum: ~
+
+# apt/yum repository settings
+filebeat_gpg_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+filebeat_apt_url: "deb https://artifacts.elastic.co/packages/{{ filebeat_version.split('.')[0] }}.x/apt stable main"
+filebeat_yum_url: "https://artifacts.elastic.co/packages/{{ filebeat_version.split('.')[0] }}.x/yum"
+
+# if yes, will only install (will not manage config or service)
+filebeat_install_only: no
 
 # enable/disable filebeat service
 filebeat_service_enabled: yes

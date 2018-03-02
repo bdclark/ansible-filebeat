@@ -1,0 +1,28 @@
+---
+- block:
+  - name: download filebeat deb
+    get_url:
+      url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_deb_filename }}"
+      checksum: "{{ filebeat_deb_checksum|default(omit) }}"
+      dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename}}"
+
+  - name: install filebeat deb
+    apt:
+      deb: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename }}"
+      state: present
+      force: yes
+    notify: restart filebeat
+  when: ansible_os_family == 'Debian'
+
+- block:
+  - name: download filebeat rpm
+    get_url:
+      url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_rpm_filename }}"
+      checksum: "{{ filebeat_rpm_checksum|default(omit) }}"
+      dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename}}"
+
+  - name: install filebeat rpm
+    yum:
+      name: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename }}"
+      state: present
+  when: not ansible_os_family == 'Debian'

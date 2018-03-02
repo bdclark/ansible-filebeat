@@ -1,50 +1,34 @@
 ---
-- block:
-  - name: download filebeat deb
-    get_url:
-      url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_deb_filename }}"
-      checksum: "{{ filebeat_deb_checksum|default(omit) }}"
-      dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename}}"
+- assert:
+    that: filebeat_install_method in ['package', 'repository']
+    msg: filebeat_install_method must be package or repository
 
-  - name: install filebeat deb
-    apt:
-      deb: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename }}"
-      state: present
-      force: yes
+- assert:
+    that: filebeat_version is not none and filebeat_version | string | match("^[56]\.\d+\.\d+")
+    msg: filebeat_version major version must be 5 or 6 and full version must be specified
+
+- include: "{{ filebeat_install_method }}.yml"
+
+- block:
+  - name: ensure directories exist
+    file:
+      state: directory
+      path: "{{ item }}"
+    with_items:
+      - /etc/filebeat
+      - /var/lib/filebeat
+      - /var/log/filebeat
+
+  - name: write config file
+    template:
+      src: "{{ filebeat_config_template }}"
+      dest: /etc/filebeat/filebeat.yml
+      mode: "0600"
     notify: restart filebeat
-  when: ansible_os_family == 'Debian'
 
-- block:
-  - name: download filebeat rpm
-    get_url:
-      url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_rpm_filename }}"
-      checksum: "{{ filebeat_rpm_checksum|default(omit) }}"
-      dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename}}"
-
-  - name: install filebeat rpm
-    yum:
-      name: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename }}"
-      state: present
-  when: not ansible_os_family == 'Debian'
-
-- name: ensure directories exist
-  file:
-    state: directory
-    path: "{{ item }}"
-  with_items:
-    - /etc/filebeat
-    - /var/lib/filebeat
-    - /var/log/filebeat
-
-- name: write config file
-  template:
-    src: "{{ filebeat_config_template }}"
-    dest: /etc/filebeat/filebeat.yml
-    mode: 0600
-  notify: restart filebeat
-
-- name: manage filebeat service
-  service:
-    name: filebeat
-    state: "{{ filebeat_service_enabled | ternary('started', 'stopped') }}"
-    enabled: "{{ filebeat_service_enabled }}"
+  - name: manage filebeat service
+    service:
+      name: filebeat
+      state: "{{ filebeat_service_enabled | ternary('started', 'stopped') }}"
+      enabled: "{{ filebeat_service_enabled }}"
+  when: not filebeat_install_only

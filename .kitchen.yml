@@ -22,3 +22,6 @@ suites:
 - name: default
   provisioner:
     playbook: test/playbooks/default.yml
+- name: repo
+  provisioner:
+    playbook: test/playbooks/repo.yml
