@@ -29,6 +29,6 @@
   - name: manage filebeat service
     service:
       name: filebeat
-      state: "{{ filebeat_service_enabled | ternary('started', 'stopped') }}"
+      state: "{{ filebeat_service_state }}"
       enabled: "{{ filebeat_service_enabled }}"
   when: not filebeat_install_only

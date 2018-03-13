@@ -24,6 +24,8 @@ filebeat_install_only: no
 
 # enable/disable filebeat service
 filebeat_service_enabled: yes
+# desired state of filebeat service
+filebeat_service_state: "{{ filebeat_service_enabled | ternary('started', 'stopped') }}"
 
 # filebeat config (excluding prospectors and modules)
 filebeat_config: {}

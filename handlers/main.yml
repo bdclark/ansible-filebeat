@@ -3,4 +3,4 @@
   service:
     name: filebeat
     state: restarted
-  when: filebeat_service_enabled
+  when: filebeat_service_enabled and filebeat_service_state == 'started'
