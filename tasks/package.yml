@@ -4,7 +4,7 @@
       get_url:
         url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_deb_filename }}"
         checksum: "{{ filebeat_deb_checksum|default(omit) }}"
-        dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename}}"
+        dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_deb_filename }}"
 
     - name: install filebeat deb
       apt:
@@ -19,7 +19,7 @@
       get_url:
         url: "{{ filebeat_artifact_baseurl }}/{{ filebeat_rpm_filename }}"
         checksum: "{{ filebeat_rpm_checksum|default(omit) }}"
-        dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename}}"
+        dest: "{{ filebeat_artficat_download_dir }}/{{ filebeat_rpm_filename }}"
 
     - name: install filebeat rpm
       yum:

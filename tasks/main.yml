@@ -1,9 +1,11 @@
 ---
-- assert:
+- name: ensure supported install method
+  assert:
     that: filebeat_install_method in ['package', 'repository']
     msg: filebeat_install_method must be package or repository
 
-- assert:
+- name: ensure supported version
+  assert:
     that: filebeat_version is not none and filebeat_version | string | match("^[56]\.\d+\.\d+")
     msg: filebeat_version major version must be 5 or 6 and full version must be specified
 
