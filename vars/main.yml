@@ -10,7 +10,7 @@ filebeat_base_config_6x:
   filebeat:
     config:
       modules:
-        path:  /etc/filebeat/modules.d/*.yml
+        path: /etc/filebeat/modules.d/*.yml
         reload:
           enabled: false
   setup:

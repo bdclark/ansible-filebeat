@@ -10,25 +10,25 @@
 - include: "{{ filebeat_install_method }}.yml"
 
 - block:
-  - name: ensure directories exist
-    file:
-      state: directory
-      path: "{{ item }}"
-    with_items:
-      - /etc/filebeat
-      - /var/lib/filebeat
-      - /var/log/filebeat
+    - name: ensure directories exist
+      file:
+        state: directory
+        path: "{{ item }}"
+      with_items:
+        - /etc/filebeat
+        - /var/lib/filebeat
+        - /var/log/filebeat
 
-  - name: write config file
-    template:
-      src: "{{ filebeat_config_template }}"
-      dest: /etc/filebeat/filebeat.yml
-      mode: "0600"
-    notify: restart filebeat
+    - name: write config file
+      template:
+        src: "{{ filebeat_config_template }}"
+        dest: /etc/filebeat/filebeat.yml
+        mode: "0600"
+      notify: restart filebeat
 
-  - name: manage filebeat service
-    service:
-      name: filebeat
-      state: "{{ filebeat_service_state }}"
-      enabled: "{{ filebeat_service_enabled }}"
+    - name: manage filebeat service
+      service:
+        name: filebeat
+        state: "{{ filebeat_service_state }}"
+        enabled: "{{ filebeat_service_enabled }}"
   when: not filebeat_install_only

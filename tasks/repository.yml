@@ -34,7 +34,7 @@
         description: "Elastic repository for {{ filebeat_version.split('.')[0] }}.x packages"
         baseurl: "{{ filebeat_yum_url }}"
         gpgkey: "{{ filebeat_gpg_key }}"
-        gpgcheck: yes
+        gpgcheck: true
 
     - name: install filebeat (yum)
       yum:

@@ -20,10 +20,10 @@ filebeat_apt_url: "deb https://artifacts.elastic.co/packages/{{ filebeat_version
 filebeat_yum_url: "https://artifacts.elastic.co/packages/{{ filebeat_version.split('.')[0] }}.x/yum"
 
 # if yes, will only install (will not manage config or service)
-filebeat_install_only: no
+filebeat_install_only: false
 
 # enable/disable filebeat service
-filebeat_service_enabled: yes
+filebeat_service_enabled: true
 # desired state of filebeat service
 filebeat_service_state: "{{ filebeat_service_enabled | ternary('started', 'stopped') }}"
 
