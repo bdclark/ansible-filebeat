@@ -1,6 +1,6 @@
 ---
 # filebeat version to install
-filebeat_version: 6.2.2
+filebeat_version: 6.6.1
 
 # installation method, can be package or repository
 filebeat_install_method: package
@@ -11,8 +11,8 @@ filebeat_artifact_baseurl: https://artifacts.elastic.co/downloads/beats/filebeat
 filebeat_deb_filename: filebeat-{{ filebeat_version }}-{{ ansible_architecture | replace("x86_64", "amd64") }}.deb
 filebeat_rpm_filename: filebeat-{{ filebeat_version }}-{{ ansible_architecture }}.rpm
 # set the following to use checksums with deb/rpm downloads
-# filebeat_deb_checksum: ~
-# filebeat_rpm_checksum: ~
+filebeat_deb_checksum: "{{ filebeat_deb_checksums[filebeat_version] | default('') }}"
+filebeat_rpm_checksum: "{{ filebeat_rpm_checksums[filebeat_version] | default('') }}"
 
 # apt/yum repository settings
 filebeat_gpg_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
@@ -27,8 +27,11 @@ filebeat_service_enabled: true
 # desired state of filebeat service
 filebeat_service_state: "{{ filebeat_service_enabled | ternary('started', 'stopped') }}"
 
-# filebeat config (excluding prospectors and modules)
+# Full configuration dictionary, rendered into filebeat.yml
 filebeat_config: {}
+
+# The following variables can be used for convenience rather than declaring them within
+# `filebeat_config`, and will be merged into the final configuration dictionary.
 ## name - will use filebeat default if not set (hostname)
 filebeat_name: ~
 ## tags (global, group, and host level if desired)
@@ -39,13 +42,18 @@ filebeat_tags_host: []
 filebeat_fields: {}
 filebeat_fields_group: {}
 filebeat_fields_host: {}
-## prospectors (global, group, and host level if desired)
-filebeat_prospectors: []
-filebeat_prospectors_group: []
-filebeat_prospectors_host: []
-## modules (global, group, and host level if desired)
+## filebeat.inputs (formerly prospectors - global, group, and host level if desired)
+filebeat_inputs: []
+filebeat_inputs_group: []
+filebeat_inputs_host: []
+## filebeat.modules (global, group, and host level if desired)
 filebeat_modules: []
 filebeat_modules_group: []
 filebeat_modules_host: []
+## processors (global, group, and host level if desired)
+filebeat_processors: []
+filebeat_processors_group: []
+filebeat_processors_host: []
 
+# template source to use for filebeat.yml.j2
 filebeat_config_template: filebeat.yml.j2

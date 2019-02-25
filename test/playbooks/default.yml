@@ -2,6 +2,7 @@
 - hosts: all
   become: true
   vars:
+    filebeat_name: myhost
     filebeat_fields:
       myglobalkey: myglobalvalue
     filebeat_fields_group:
@@ -15,13 +16,25 @@
         file:
           path: /tmp/filebeat
           filename: filebeat
-    filebeat_prospectors:
+    filebeat_inputs:
       - paths:
-          - var/log/*.log
+          - /var/log/*.log
         input_type: log
-    filebeat_prospectors_host:
+        enabled: false
+    filebeat_inputs_host:
       - paths:
-          - var/log/filebeat/*.log
+          - /var/log/filebeat/*.log
         input_type: log
+    filebeat_modules:
+      - module: system
+        syslog:
+          enabled: true
+        auth:
+          enabled: true
+    filebeat_processors:
+      - drop_event:
+          when:
+            contains:
+              source: test
   roles:
     - role: filebeat

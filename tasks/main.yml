@@ -9,7 +9,10 @@
     that: filebeat_version is not none and filebeat_version | string | match("^[56]\.\d+\.\d+")
     msg: filebeat_version major version must be 5 or 6 and full version must be specified
 
-- include: "{{ filebeat_install_method }}.yml"
+- name: include checksum vars
+  include_vars: checksums.yml
+
+- include_tasks: "{{ filebeat_install_method }}.yml"
 
 - block:
     - name: ensure directories exist
