@@ -6,8 +6,8 @@
 
 - name: ensure supported version
   assert:
-    that: filebeat_version is not none and filebeat_version | string | match("^[56]\.\d+\.\d+")
-    msg: filebeat_version major version must be 5 or 6 and full version must be specified
+    that: filebeat_version is not none and filebeat_version | string | match("^[567]\.\d+\.\d+")
+    msg: filebeat_version major version must be 5, 6, or 7 and full version must be specified
 
 - name: include checksum vars
   include_vars: checksums.yml

@@ -5,6 +5,12 @@ import yaml
 import sys
 
 VERSIONS = [
+  '7.0.1',
+  '7.0.0',
+  '6.7.2',
+  '6.7.1',
+  '6.7.0',
+  '6.6.2',
   '6.6.1',
   '6.6.0',
   '6.5.4',
@@ -43,7 +49,7 @@ def get_checksum(version, type):
     checksum = r.text.split(" ")[0]
     return "sha512:" + checksum
   else:
-    print "failed to get: " + deb_url
+    print "failed to get: " + url
     sys.exit(1)
 
 data = {

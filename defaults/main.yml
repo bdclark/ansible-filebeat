@@ -1,6 +1,6 @@
 ---
 # filebeat version to install
-filebeat_version: 6.6.1
+filebeat_version: 7.0.1
 
 # installation method, can be package or repository
 filebeat_install_method: package
@@ -34,23 +34,23 @@ filebeat_config: {}
 # `filebeat_config`, and will be merged into the final configuration dictionary.
 ## name - will use filebeat default if not set (hostname)
 filebeat_name: ~
-## tags (global, group, and host level if desired)
+## tags - global, group, and host level if desired (will be combined)
 filebeat_tags: []
 filebeat_tags_group: []
 filebeat_tags_host: []
-## fields (global, group, and host level if desired)
+## fields - global, group, and host level if desired (will be merged in order below)
 filebeat_fields: {}
 filebeat_fields_group: {}
 filebeat_fields_host: {}
-## filebeat.inputs (formerly prospectors - global, group, and host level if desired)
+## filebeat.inputs (prospectors) - global, group, and host level if desired (will be merged in order below)
 filebeat_inputs: []
 filebeat_inputs_group: []
 filebeat_inputs_host: []
-## filebeat.modules (global, group, and host level if desired)
+## filebeat.modules - global, group, and host level if desired (will be combined)
 filebeat_modules: []
 filebeat_modules_group: []
 filebeat_modules_host: []
-## processors (global, group, and host level if desired)
+## processors - global, group, and host level if desired (will be combined)
 filebeat_processors: []
 filebeat_processors_group: []
 filebeat_processors_host: []
