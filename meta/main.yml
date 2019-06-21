@@ -9,14 +9,15 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - trusty
         - xenial
         - bionic
     - name: EL
       versions:
-        - "6"
         - "7"
-
+    - name: Amazon
+      versions:
+        - "2017.09"
+        - "2017.12"
   galaxy_tags: []
 
 dependencies: []

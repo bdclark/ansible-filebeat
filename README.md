@@ -1,8 +1,18 @@
-# filebeat
+# Ansible Role: filebeat
 
 [![Build Status](https://travis-ci.org/bdclark/ansible-filebeat.svg?branch=master)](https://travis-ci.org/bdclark/ansible-filebeat)
 
 Install/configure Elastic Filebeat
+
+Tested Operating Systems and Ansible Versions
+---------------------------------------------
+This role is tested using Ansible 2.6, 2.7, and 2.8 on the operating systems shown below.
+Other distributions and versions may work, YMMV.
+
+- Ubuntu 18.04
+- Ubuntu 16.04
+- Centos 7
+- Amazon Linux 2
 
 Role Variables
 --------------
